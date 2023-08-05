@@ -1,0 +1,24 @@
+# Specify the base image
+FROM node:18
+
+# Set the working directory in the container
+WORKDIR /usr/src/app
+
+# Copy package.json and package-lock.json
+COPY package*.json ./
+
+# Install app dependencies
+RUN npm install
+
+# If you have build dependencies, you can install them like this
+# RUN npm ci --only=production
+# Bundle app source
+COPY . .
+
+RUN npx prisma generate
+
+# Transpile the TypeScript to JavaScript
+RUN npx tsc --project tsconfig.converter.json
+
+# Start the application
+CMD [ "node", "dist/converter/index.js" ]

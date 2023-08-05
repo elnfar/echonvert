@@ -44,13 +44,13 @@ export async function GET(req:NextRequest,{params}:{params:{id:string}}) {
     const s3 = new AWS.S3();
 
     const downloadParams = {
-        Bucket: bucket,
+        Bucket: bucket, 
         Key: conversion.fileLocation.replace(`s3://${bucket}/`,''), // File name you want to save as in S3
 
       };
     
 
-    const stream =  Readable.toWeb(s3.getObject(downloadParams).createReadStream())
+    const stream = Readable.toWeb(s3.getObject(downloadParams).createReadStream())
 
     return new NextResponse(stream as any, {
         headers: {
@@ -58,6 +58,4 @@ export async function GET(req:NextRequest,{params}:{params:{id:string}}) {
             'Content-Disposition':`attachment; filename=download.${conversion.to}`
         }
     })
-
-    return 
 }
